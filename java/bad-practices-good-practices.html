@@ -1,0 +1,259 @@
+<html>
+	<head>
+		<style>
+			* {
+				font-family: Verdana, Arial, Helvetica;
+				font-size: 10pt;
+			}
+			
+			body {
+				display: flex;
+				flex-wrap: wrap;
+				padding: 0;
+				margin: 0;
+			}
+			
+			.cheat {
+				border: 1px solid gray;
+				margin: 5pt;
+				width: 65em
+			}
+			
+			.body {
+				padding: 5pt;
+			}
+			
+			.code {
+				margin: 5px;
+			}
+		
+			h2 {
+				font-size: 1.2em;
+				font-weight: bold;
+				background-color: #99DDDD;
+				padding: 2pt;
+				margin: 0;
+			}
+			
+			.subtitle {
+				font-weight: bold;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="cheat">
+			<h2>Use loggers instead of console</h2>
+			<div class="body">
+				<div>
+					<h3>Bad:</h3>
+					<div class="code">
+<!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">package</span> cheatsheets<span style="color: #333333">;</span>
+
+<span style="color: #008800; font-weight: bold">class</span> <span style="color: #BB0066; font-weight: bold">MyClass</span> <span style="color: #333333">{</span>
+	<span style="color: #333399; font-weight: bold">void</span> <span style="color: #0066BB; font-weight: bold">myMethod</span><span style="color: #333333">()</span> <span style="color: #333333">{</span>
+		System<span style="color: #333333">.</span><span style="color: #0000CC">out</span><span style="color: #333333">.</span><span style="color: #0000CC">println</span><span style="color: #333333">(</span><span style="background-color: #fff0f0">&quot;Logging something&quot;</span><span style="color: #333333">);</span>
+	<span style="color: #333333">}</span>
+<span style="color: #333333">}</span>
+</pre></div>
+					</div>
+					<ul>
+						<li>Difficult to preserve and manage the logs.</li>
+						<li>No distinction between informational and error messages.</li>
+						<li>Difficult to manage arguments.</li>
+						<li>No indication of date/time or other important data.</li>
+					</ul>
+				</div>
+				<div>
+					<h3>Good:</h3>
+					<div class="code">
+<!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">package</span> cheatsheets<span style="color: #333333">;</span>
+
+<span style="color: #008800; font-weight: bold">import</span> <span style="color: #0e84b5; font-weight: bold">org.slf4j.Logger</span><span style="color: #333333">;</span>
+<span style="color: #008800; font-weight: bold">import</span> <span style="color: #0e84b5; font-weight: bold">org.slf4j.LoggerFactory</span><span style="color: #333333">;</span>
+
+<span style="color: #008800; font-weight: bold">class</span> <span style="color: #BB0066; font-weight: bold">MyClass</span> <span style="color: #333333">{</span>
+	<span style="color: #008800; font-weight: bold">private</span> <span style="color: #008800; font-weight: bold">static</span> <span style="color: #008800; font-weight: bold">final</span> Logger LOGGER <span style="color: #333333">=</span> LoggerFactory<span style="color: #333333">.</span><span style="color: #0000CC">getLogger</span><span style="color: #333333">(</span>MyClass<span style="color: #333333">.</span><span style="color: #0000CC">class</span><span style="color: #333333">);</span>
+
+	<span style="color: #333399; font-weight: bold">void</span> <span style="color: #0066BB; font-weight: bold">myMethod</span><span style="color: #333333">()</span> <span style="color: #333333">{</span>
+		LOGGER<span style="color: #333333">.</span><span style="color: #0000CC">info</span><span style="color: #333333">(</span><span style="background-color: #fff0f0">&quot;Logging something&quot;</span><span style="color: #333333">);</span>
+	<span style="color: #333333">}</span>
+<span style="color: #333333">}</span>
+</pre></div>
+					</div>
+					<ul>
+						<li>Needs a dependency to <a target="_blank" href="https://mvnrepository.com/artifact/org.slf4j/slf4j-api">slf4j api</a> and the implementation of your <a target="_blank" href="https://mvnrepository.com/artifact/ch.qos.logback/logback-classic">logging framework of choice</a>.</li>
+						<li>Using slf4j allows to swap the underlying logging library without any changes to code.</li>
+						<li>Dedicated logging libraries support log management features enabling for uniform logs containing useful data like date/time.</li>
+					</ul>
+				</div>
+				<div>
+					<h3>Better:</h3>
+					<div class="code">
+<!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">package</span> cheatsheets<span style="color: #333333">;</span>
+
+<span style="color: #008800; font-weight: bold">import</span> <span style="color: #0e84b5; font-weight: bold">lombok.extern.slf4j.Slf4j</span><span style="color: #333333">;</span>
+<span style="color: #008800; font-weight: bold">import</span> <span style="color: #0e84b5; font-weight: bold">org.slf4j.LoggerFactory</span><span style="color: #333333">;</span>
+
+<span style="color: #555555; font-weight: bold">@Slf4j</span>
+<span style="color: #008800; font-weight: bold">class</span> <span style="color: #BB0066; font-weight: bold">MyClass</span> <span style="color: #333333">{</span>
+	<span style="color: #333399; font-weight: bold">void</span> <span style="color: #0066BB; font-weight: bold">myMethod</span><span style="color: #333333">()</span> <span style="color: #333333">{</span>
+		log<span style="color: #333333">.</span><span style="color: #0000CC">info</span><span style="color: #333333">(</span><span style="background-color: #fff0f0">&quot;Logging something&quot;</span><span style="color: #333333">);</span>
+	<span style="color: #333333">}</span>
+<span style="color: #333333">}</span>
+</pre></div>
+					</div>
+					<ul>
+						<li>Needs a dependency to <a target="_blank" href="https://projectlombok.org/">Project Lombok</a>.</li>
+						<li>Using Lombok allows to avoid adding the <strong>LOGGER</strong> variable with a reference to the current class, which is often done through copy/paste, leading to wrong class references and therefore wrong loggers being used.</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="cheat">
+			<h2>Add throws declaration instead of catching/rethrowing exceptions</h2>
+			<div class="body">
+				<div>
+					<h3>Bad:</h3>
+					<div class="code">
+<!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">package</span> cheatsheets<span style="color: #333333">;</span>
+
+<span style="color: #008800; font-weight: bold">class</span> <span style="color: #BB0066; font-weight: bold">MyClass</span> <span style="color: #333333">{</span>
+	<span style="color: #008800; font-weight: bold">private</span> <span style="color: #008800; font-weight: bold">static</span> <span style="color: #008800; font-weight: bold">final</span> Logger LOGGER <span style="color: #333333">=</span> LoggerFactory<span style="color: #333333">.</span><span style="color: #0000CC">getLogger</span><span style="color: #333333">(</span>MyClass<span style="color: #333333">.</span><span style="color: #0000CC">class</span><span style="color: #333333">);</span>
+
+	<span style="color: #333399; font-weight: bold">void</span> <span style="color: #0066BB; font-weight: bold">myMethod</span><span style="color: #333333">()</span> <span style="color: #333333">{</span>
+		<span style="color: #008800; font-weight: bold">try</span> <span style="color: #333333">{</span>
+			theMethodThrowingAnException<span style="color: #333333">();</span>
+		<span style="color: #333333">}</span>
+		<span style="color: #008800; font-weight: bold">catch</span><span style="color: #333333">(</span>Exception ex<span style="color: #333333">)</span> <span style="color: #333333">{</span>
+			LOGGER<span style="color: #333333">.</span><span style="color: #0000CC">error</span><span style="color: #333333">(</span>ex<span style="color: #333333">);</span>
+			<span style="color: #008800; font-weight: bold">throw</span> <span style="color: #008800; font-weight: bold">new</span> <span style="color: #0066BB; font-weight: bold">RuntimeException</span><span style="color: #333333">(</span>ex<span style="color: #333333">);</span>
+		<span style="color: #333333">}</span>
+	<span style="color: #333333">}</span>
+	
+	<span style="color: #333399; font-weight: bold">void</span> <span style="color: #0066BB; font-weight: bold">theMethodThrowingAnException</span><span style="color: #333333">()</span> <span style="color: #008800; font-weight: bold">throws</span> Exception <span style="color: #333333">{</span>
+		<span style="color: #008800; font-weight: bold">throw</span> <span style="color: #008800; font-weight: bold">new</span> <span style="color: #0066BB; font-weight: bold">Exception</span><span style="color: #333333">(</span><span style="background-color: #fff0f0">&quot;I&#39;m throwing an exception&quot;</span><span style="color: #333333">);</span>
+	<span style="color: #333333">}</span>
+<span style="color: #333333">}</span>
+</pre></div>
+					</div>
+					<ul>
+						<li>Makes logs confusing as it often causes the same error to be logged multiple times.</li>
+						<li>You risk forgetting to rethrow the exception, which will hide problems causing bigger ones later.</li>
+						<li>The stack trace and log gets polluted, making it confusing.</li>
+						<li>Lots of code for no good reason, making it confusing and difficult to understand.</li>
+					</ul>
+				</div>
+				<div>
+					<h3>Good:</h3>
+					<div class="code">
+<!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">package</span> cheatsheets<span style="color: #333333">;</span>
+
+<span style="color: #008800; font-weight: bold">class</span> <span style="color: #BB0066; font-weight: bold">MyClass</span> <span style="color: #333333">{</span>
+	<span style="color: #333399; font-weight: bold">void</span> <span style="color: #0066BB; font-weight: bold">myMethod</span><span style="color: #333333">()</span> <span style="color: #008800; font-weight: bold">throws</span> Exception <span style="color: #333333">{</span>
+		theMethodThrowingAnException<span style="color: #333333">();</span>
+	<span style="color: #333333">}</span>
+	
+	<span style="color: #333399; font-weight: bold">void</span> <span style="color: #0066BB; font-weight: bold">theMethodThrowingAnException</span><span style="color: #333333">()</span> <span style="color: #008800; font-weight: bold">throws</span> Exception <span style="color: #333333">{</span>
+		<span style="color: #008800; font-weight: bold">throw</span> <span style="color: #008800; font-weight: bold">new</span> <span style="color: #0066BB; font-weight: bold">Exception</span><span style="color: #333333">(</span><span style="background-color: #fff0f0">&quot;I&#39;m throwing an exception&quot;</span><span style="color: #333333">);</span>
+	<span style="color: #333333">}</span>
+<span style="color: #333333">}</span>
+</pre></div>
+					</div>
+					<ul>
+						<li>A lot less code.</li>
+						<li>No chance of hiding important errors.</li>
+						<li>Logs don't get polluted.</li>
+					</ul>
+				</div>
+				<div>
+					<h3>Alternative:</h3>
+					<div class="code">
+<!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">package</span> cheatsheets<span style="color: #333333">;</span>
+
+<span style="color: #008800; font-weight: bold">import</span> <span style="color: #0e84b5; font-weight: bold">lombok.SneakyThrows</span><span style="color: #333333">;</span>
+
+<span style="color: #008800; font-weight: bold">class</span> <span style="color: #BB0066; font-weight: bold">MyClass</span> <span style="color: #333333">{</span>
+	<span style="color: #555555; font-weight: bold">@SneakyThrows</span>
+	<span style="color: #333399; font-weight: bold">void</span> <span style="color: #0066BB; font-weight: bold">myMethod</span><span style="color: #333333">()</span> <span style="color: #333333">{</span>
+		theMethodThrowingAnException<span style="color: #333333">();</span>
+	<span style="color: #333333">}</span>
+	
+	<span style="color: #333399; font-weight: bold">void</span> <span style="color: #0066BB; font-weight: bold">theMethodThrowingAnException</span><span style="color: #333333">()</span> <span style="color: #008800; font-weight: bold">throws</span> Exception <span style="color: #333333">{</span>
+		<span style="color: #008800; font-weight: bold">throw</span> <span style="color: #008800; font-weight: bold">new</span> <span style="color: #0066BB; font-weight: bold">Exception</span><span style="color: #333333">(</span><span style="background-color: #fff0f0">&quot;I&#39;m throwing an exception&quot;</span><span style="color: #333333">);</span>
+	<span style="color: #333333">}</span>
+<span style="color: #333333">}</span>
+</pre></div>
+					</div>
+					<ul>
+						<li>Needs a dependency to <a target="_blank" href="https://projectlombok.org/">Project Lombok</a>.</li>
+						<li>Useful when you don't have the freedom to add a <strong>throws</strong> declaration, for example if your method is meant to implement some interface.</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="cheat">
+			<h2>Keep methods short instead of packing them with functionality</h2>
+			<div class="body">
+				<div>
+					<h3>Bad:</h3>
+					<div class="code">
+					// code of algorith to turn numbers into their literal representation, like 827998 -> eight-hundred-twenty-seven-thousand-nine-hundred-ninety-eight, all in one function
+					</div>
+					<ul>
+						<li>Code is difficult to understand.</li>
+						<li>Code is difficult to test.</li>
+						<li>Leads to high repetition, preventing from seeing common code.</li>
+						<li>Leads to high complexity, which increases the likelyhood of bugs.</li>
+					</ul>
+				</div>
+				<div>
+					<h3>Good:</h3>
+					<div class="code">
+					// code of algorithm above, but the function that deals with a group is externalised
+					</div>
+					<ul>
+						<li>Each function has a clear, simple purpose.</li>
+						<li>It's easy to write tests for individual functions.</li>
+						<li>Repetition is kept to a minimum.</li>
+					</ul>
+				</div>
+				<div>
+					<h3>Remarks: </h3>
+					<ul>
+						<li>Common in projects with little automated testing and no code review process in place.</li>
+						<li>Before refactoring long code you need extensive behavioural tests on it.</li>
+						<li>This problem should be prevented rather than fixed later.</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="cheat">
+			<h2>Avoid code with side-effects</h2>
+			<div class="body">
+				<div>
+					<h3>Bad:</h3>
+					<div class="code">
+					// example code with setter on a collection that calls sort
+					// the setter is called within a for loop on the collection itself (demuxer)
+					// code expected to throw concurrentmodificationexception
+					</div>
+					<ul>
+						<li>Will affect external code in unpredictable (and difficult to test) ways.</li>
+						<li>Adding code with side-effects could cause errors very difficult to track.</li>
+						<li>It easily translates into a scramble to fix unexplicable problems.</li>
+					</ul>
+				</div>
+				<div>
+					<h3>Good:</h3>
+					<div class="code">
+					// same code but sort is not called
+					</div>
+					<ul>
+						<li>Code is predictable.</li>
+						<li>No unexplicable problems will happen.</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
